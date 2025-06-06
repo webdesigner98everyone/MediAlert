@@ -1,29 +1,25 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Slot, useRouter, useSegments, useNavigationContainerRef } from 'expo-router';
+import { useEffect, useState } from 'react';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const router = useRouter();
+  const segments = useSegments();
+  const [isReady, setIsReady] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // cambiar a true si ya inició sesión
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  // Esperamos que el layout esté listo antes de redirigir
+  useEffect(() => {
+    setIsReady(true);
+  }, []);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+  useEffect(() => {
+    if (!isReady) return;
+
+    const inTabsGroup = segments[0] === '(tabs)';
+    if (!isLoggedIn && inTabsGroup) {
+      router.replace('/login');
+    }
+  }, [isReady, isLoggedIn, segments]);
+
+  return <Slot />;
 }

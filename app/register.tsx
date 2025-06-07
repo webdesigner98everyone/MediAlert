@@ -2,12 +2,46 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView 
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Register() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+
+   const handleRegister = async () => {
+    if (!name || !email || !password || !confirm) {
+      alert('Por favor completa todos los campos.');
+      return;
+    }
+
+    if (password !== confirm) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+
+    const user = {
+      name,
+      email,
+      password
+    };
+
+    try {
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+      alert('Registro exitoso');
+      router.replace('/'); // volver al login
+    } catch (e) {
+      console.error(e);
+      alert('Error al guardar el usuario');
+    }
+  };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -16,24 +50,24 @@ export default function Register() {
       <Text style={styles.title}>Registro a {'\n'}<Text style={{ fontWeight: 'bold' }}>MediAlert</Text></Text>
       <Text style={styles.subtitle}>Regístrate para llevar el control a tus medicamentos y procesos médicos.</Text>
 
-      <TextInput style={styles.input} placeholder="Introducir nombre" placeholderTextColor="#999" />
-      <TextInput style={styles.input} placeholder="Introducir correo electrónico" placeholderTextColor="#999" keyboardType="email-address" />
+      <TextInput style={styles.input} placeholder="Introducir nombre" placeholderTextColor="#999" value={name} onChangeText={setName} />
+      <TextInput style={styles.input} placeholder="Introducir correo electrónico" placeholderTextColor="#999" keyboardType="email-address" value={email} onChangeText={setEmail} />
 
       <View style={styles.passwordContainer}>
-        <TextInput style={styles.passwordInput} placeholder="Crear contraseña" placeholderTextColor="#999" secureTextEntry={!showPassword} />
+        <TextInput style={styles.passwordInput} placeholder="Crear contraseña" placeholderTextColor="#999" secureTextEntry={!showPassword} value={password} onChangeText={setPassword} />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.passwordContainer}>
-        <TextInput style={styles.passwordInput} placeholder="Confirmar Contraseña" placeholderTextColor="#999" secureTextEntry={!showConfirm} />
+        <TextInput style={styles.passwordInput} placeholder="Confirmar Contraseña" placeholderTextColor="#999" secureTextEntry={!showConfirm} value={confirm} onChangeText={setConfirm} />
         <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
           <Ionicons name={showConfirm ? "eye-off" : "eye"} size={24} color="#aaa" />
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.registerButton}>
+      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.registerText}>Registrarse</Text>
       </TouchableOpacity>
 

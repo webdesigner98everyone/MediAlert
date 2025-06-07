@@ -2,35 +2,56 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter(); // 👈 Para navegar
 
-  const handleLogin = () => {
-    // Aquí puedes validar usuario y contraseña más adelante
-    router.replace('/(tabs)'); // 👈 Esto navega a la pantalla principal
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user');
+      if (!jsonValue) {
+        alert('Usuario no encontrado. Regístrate primero.');
+        return;
+      }
+
+      const user = JSON.parse(jsonValue);
+
+      if (email === user.email && password === user.password) {
+        alert('Inicio de sesión exitoso');
+        router.replace('/(tabs)');
+      } else {
+        alert('Correo o contraseña incorrectos');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Error al iniciar sesión');
+    }
   };
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
 
-      <Image
-        source={require('../assets/images/login-image.png')}
-        style={styles.image}
-      />
+      <Image source={require('../assets/images/login-image.png')} style={styles.image} />
 
       <Text style={styles.title}>Bienvenido a{"\n"}MediAlert</Text>
       <Text style={styles.subtitle}>Gestione sus medicamentos con facilidad</Text>
 
-      <TextInput style={styles.input} placeholder="Usuario" />
+      <TextInput style={styles.input} placeholder="Correo electrónico" value={email} onChangeText={setEmail} />
 
       <View style={styles.passwordContainer}>
         <TextInput
           style={styles.passwordInput}
           placeholder="Contraseña"
           secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />
@@ -40,7 +61,7 @@ export default function LoginScreen() {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity onPress={() => router.push('/register')}>
         <Text style={styles.link}>Registrarse</Text>
       </TouchableOpacity>

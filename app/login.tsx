@@ -1,36 +1,31 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { loginUser } from '../utils/auth';
 
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter(); // 👈 Para navegar
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // 👈 estado para loading
 
   const handleLogin = async () => {
+    setLoading(true); // 👈 activa loading
     try {
-      const jsonValue = await AsyncStorage.getItem('user');
-      if (!jsonValue) {
-        alert('Usuario no encontrado. Regístrate primero.');
-        return;
-      }
-
-      const user = JSON.parse(jsonValue);
-
-      if (email === user.email && password === user.password) {
-        alert('Inicio de sesión exitoso');
+      const user = await loginUser(email, password);
+      if (user) {
+        Alert.alert('Éxito', 'Sesión iniciada correctamente');
         router.replace('/(tabs)');
       } else {
-        alert('Correo o contraseña incorrectos');
+        Alert.alert('Error', 'Usuario o contraseña incorrectos');
       }
-    } catch (e) {
-      console.error(e);
-      alert('Error al iniciar sesión');
+    } catch (error) {
+      Alert.alert('Error', 'Ocurrió un problema al iniciar sesión');
+    } finally {
+      setLoading(false); // 👈 desactiva loading
     }
   };
 
@@ -43,23 +38,31 @@ export default function LoginScreen() {
       <Text style={styles.title}>Bienvenido a{"\n"}MediAlert</Text>
       <Text style={styles.subtitle}>Gestione sus medicamentos con facilidad</Text>
 
-      <TextInput style={styles.input} placeholder="Correo electrónico" value={email} onChangeText={setEmail} />
+      <TextInput
+        style={styles.input}
+        placeholder="Usuario"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+      />
 
       <View style={styles.passwordContainer}>
         <TextInput
           style={styles.passwordInput}
           placeholder="Contraseña"
-          secureTextEntry={!showPassword}
           value={password}
           onChangeText={setPassword}
+          secureTextEntry={!showPassword}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
+      {loading && <ActivityIndicator size="large" color="#5f41ff" style={{ marginBottom: 12 }} />}
+      
+      <TouchableOpacity style={[styles.button, loading && { opacity: 0.6 }]} onPress={handleLogin} disabled={loading}>
+        <Text style={styles.buttonText}>{loading ? 'Iniciando sesión...' : 'Iniciar sesión'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push('/register')}>

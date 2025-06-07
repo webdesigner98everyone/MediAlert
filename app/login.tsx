@@ -40,8 +40,8 @@ export default function LoginScreen() {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity>
+      
+      <TouchableOpacity onPress={() => router.push('/register')}>
         <Text style={styles.link}>Registrarse</Text>
       </TouchableOpacity>
 

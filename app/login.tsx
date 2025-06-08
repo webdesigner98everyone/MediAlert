@@ -18,7 +18,7 @@ export default function LoginScreen() {
       const user = await loginUser(email, password);
       if (user) {
         Alert.alert('Éxito', 'Sesión iniciada correctamente');
-        router.replace('/(tabs)');
+        router.replace('/dashboard');
       } else {
         Alert.alert('Error', 'Usuario o contraseña incorrectos');
       }

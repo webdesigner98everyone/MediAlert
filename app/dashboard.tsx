@@ -55,12 +55,37 @@ export default function Dashboard() {
         }, [])
     );
 
+    const handleEdit = (id: string) => {
+        //router.push(`/edit-medicine/${id}`); // Suponiendo que tienes una ruta de edición
+    };
+
+    const handleDelete = async (id: string) => {
+        try {
+            const user = await getCurrentUser();
+            if (!user) return;
+
+            const updated = medications.filter(med => med.id !== id);
+            await AsyncStorage.setItem(`medications_${user.email}`, JSON.stringify(updated));
+            setMedications(updated);
+        } catch (error) {
+            console.error('Error eliminando medicamento:', error);
+        }
+    };
+
     const renderMedication = ({ item }: { item: Medication }) => (
         <View style={styles.medicationItem}>
             <Image source={{ uri: item.image }} style={styles.image} />
-            <View>
-                <Text style={styles.medicationName}>{String(item.name || '')}</Text>
-                <Text style={styles.medicationTime}>Próxima: {String(item.time || '')}</Text>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Text style={styles.medicationName}>{item.name}</Text>
+                <Text style={styles.medicationTime}>Próxima: {item.time}</Text>
+            </View>
+            <View style={styles.buttonGroup}>
+                <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.editButton}>
+                    <Ionicons name="pencil" size={18} color="#fff" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteButton}>
+                    <Ionicons name="trash" size={18} color="#fff" />
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -149,6 +174,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 15,
+        padding: 12,
+        borderRadius: 12,
+        backgroundColor: '#f9f9f9',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3, // para Android
         gap: 10,
     },
     image: {
@@ -181,5 +214,24 @@ const styles = StyleSheet.create({
     addButtonText: {
         color: '#fff',
         fontWeight: 'bold',
+    },
+    buttonGroup: {
+        flexDirection: 'row',
+        gap: 8,
+        marginLeft: 10,
+    },
+    editButton: {
+        backgroundColor: '#4CAF50', // Verde
+        padding: 8,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    deleteButton: {
+        backgroundColor: '#FFC107', // Amarillo
+        padding: 8,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

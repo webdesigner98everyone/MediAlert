@@ -1,5 +1,7 @@
-import { Slot, useRouter, useSegments, useNavigationContainerRef } from 'expo-router';
+import { Slot, useRouter, useSegments } from 'expo-router';
 import { useEffect, useState } from 'react';
+import * as Notifications from 'expo-notifications';
+import { Platform, Alert } from 'react-native';
 
 export default function RootLayout() {
   const router = useRouter();
@@ -7,7 +9,31 @@ export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // cambiar a true si ya inició sesión
 
-  // Esperamos que el layout esté listo antes de redirigir
+  // Solicitar permisos de notificación y configurar comportamiento
+  useEffect(() => {
+    const setupNotifications = async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permiso necesario',
+          'Necesitamos permisos de notificaciones para recordarte tus medicamentos.'
+        );
+      }
+
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+          shouldShowBanner: true,
+          shouldShowList: true,
+        }),
+      });
+    };
+
+    setupNotifications();
+  }, []);
+
   useEffect(() => {
     setIsReady(true);
   }, []);

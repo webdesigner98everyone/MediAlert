@@ -6,6 +6,8 @@ import { useRouter } from 'expo-router';
 import { getCurrentUser } from '../utils/auth';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
+import * as Notifications from 'expo-notifications';
+
 
 // Tipado para el estado del medicamento
 interface Medicine {
@@ -113,6 +115,31 @@ const AddMedicine: React.FC = () => {
             const newMed = { ...medicine, id: Date.now().toString() };
             meds.push(newMed);
             await AsyncStorage.setItem(storageKey, JSON.stringify(meds));
+
+            // Notificación
+            // Programar la notificación local para la hora del medicamento
+            const [hour, minute] = medicine.time.split(':').map(Number);
+            const now = new Date();
+            const notificationTime = new Date();
+            notificationTime.setHours(hour, minute, 0);
+
+            // Si la hora ya pasó hoy, programa para mañana
+            if (notificationTime <= now) {
+                notificationTime.setDate(notificationTime.getDate() + 1);
+            }
+
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                    title: `¡Hora de tomar ${medicine.name}!`,
+                    body: `Dosis: ${medicine.dose} ${medicine.unit} - Vía: ${medicine.via}`,
+                    sound: true,
+                },
+                trigger: {
+                    hour,
+                    minute,
+                    repeats: true,
+                } as any
+            });
 
             Alert.alert('Éxito', 'Medicamento guardado correctamente');
             router.back();

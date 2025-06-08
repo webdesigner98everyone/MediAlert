@@ -25,6 +25,7 @@
     "expo-image": "~2.2.0",
     "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.5",
+    "expo-notifications": "~0.31.3",
     "expo-router": "~5.0.7",
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
@@ -46,6 +47,7 @@
     "@types/react": "~19.0.10",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
+    "expo-module-scripts": "^4.1.7",
     "typescript": "~5.8.3"
   },
   "private": true

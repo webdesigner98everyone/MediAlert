@@ -162,7 +162,7 @@ export default function Dashboard() {
                     <Text>Tomadas</Text>
                 </View> <TouchableOpacity
                     style={styles.legendItem}
-                    onPress={() => router.push('/')} // Asegúrate de tener esta ruta
+                    onPress={() => router.push('/EditProfile')} // Asegúrate de tener esta ruta
                 >
                     <Ionicons name="person-circle-outline" size={24} color="#333" />
                     <Text style={styles.legendText}>Perfil</Text>

@@ -148,18 +148,25 @@ export default function Dashboard() {
             />
 
             <View style={styles.legendContainer}>
-                <View style={styles.legendItem}>
-                    <Ionicons name="time-outline" size={20} />
-                    <Text>Pendiente</Text>
-                </View>
+                <TouchableOpacity
+                    style={styles.legendItem}
+                    onPress={async () => {
+                        router.replace('/login'); // Asegúrate de tener esta ruta
+                    }}
+                >
+                    <Ionicons name="log-out-outline" size={24} color="#333" />
+                    <Text style={styles.legendText}>Cerrar sesión</Text>
+                </TouchableOpacity>
                 <View style={styles.legendItem}>
                     <Ionicons name="checkmark-done-outline" size={20} />
                     <Text>Tomadas</Text>
-                </View>
-                <View style={styles.legendItem}>
-                    <Ionicons name="close-outline" size={20} />
-                    <Text>Omitido</Text>
-                </View>
+                </View> <TouchableOpacity
+                    style={styles.legendItem}
+                    onPress={() => router.push('/')} // Asegúrate de tener esta ruta
+                >
+                    <Ionicons name="person-circle-outline" size={24} color="#333" />
+                    <Text style={styles.legendText}>Perfil</Text>
+                </TouchableOpacity>
             </View>
 
             <TouchableOpacity
@@ -240,6 +247,7 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
         borderRadius: 10,
         alignItems: 'center',
+        marginBottom: 40, // 👈 Agregado para subirlo un poco
     },
     addButtonText: {
         color: '#fff',
@@ -264,4 +272,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    legendText: {
+        marginTop: 4,
+        fontSize: 14,
+        color: '#333',
+    },
+
 });

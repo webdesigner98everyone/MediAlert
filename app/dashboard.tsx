@@ -2,9 +2,10 @@ import { View, Text, TextInput, Image, FlatList, TouchableOpacity, StyleSheet } 
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState, useEffect, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native'; // ✅ IMPORTANTE
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCurrentUser } from '../utils/auth';
+import { Alert } from 'react-native';
 
 interface Medication {
     id: string;
@@ -70,8 +71,11 @@ export default function Dashboard() {
             const updated = medications.filter(med => med.id !== id);
             await AsyncStorage.setItem(`medications_${user.email}`, JSON.stringify(updated));
             setMedications(updated);
+            // ✅ Confirmación al usuario de que fue eliminado
+            Alert.alert('Eliminado', 'El medicamento ha sido eliminado correctamente.');
         } catch (error) {
             console.error('Error eliminando medicamento:', error);
+            Alert.alert('Error', 'Hubo un problema al eliminar el medicamento.');
         }
     };
 
@@ -89,7 +93,27 @@ export default function Dashboard() {
                 <TouchableOpacity onPress={() => handleEdit(item.id)} style={styles.editButton}>
                     <Ionicons name="pencil" size={18} color="#fff" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleDelete(item.id)} style={styles.deleteButton}>
+                <TouchableOpacity
+                    onPress={() => {
+                        Alert.alert(
+                            'Eliminar medicamento',
+                            '¿Estás seguro de que deseas eliminar este medicamento?',
+                            [
+                                {
+                                    text: 'Cancelar',
+                                    style: 'cancel',
+                                },
+                                {
+                                    text: 'Eliminar',
+                                    onPress: () => handleDelete(item.id),
+                                    style: 'destructive',
+                                },
+                            ],
+                            { cancelable: true }
+                        );
+                    }}
+                    style={styles.deleteButton}
+                >
                     <Ionicons name="trash" size={18} color="#fff" />
                 </TouchableOpacity>
             </View>

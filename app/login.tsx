@@ -60,7 +60,7 @@ export default function LoginScreen() {
       </View>
 
       {loading && <ActivityIndicator size="large" color="#5f41ff" style={{ marginBottom: 12 }} />}
-      
+
       <TouchableOpacity style={[styles.button, loading && { opacity: 0.6 }]} onPress={handleLogin} disabled={loading}>
         <Text style={styles.buttonText}>{loading ? 'Iniciando sesión...' : 'Iniciar sesión'}</Text>
       </TouchableOpacity>
@@ -75,7 +75,9 @@ export default function LoginScreen() {
 
       <View style={styles.bottomIcons}>
         <Ionicons name="information-circle-outline" size={24} color="gray" />
-        <Ionicons name="settings-outline" size={24} color="gray" />
+        <TouchableOpacity onPress={() => router.push('/setting')}>
+          <Ionicons name="settings-outline" size={24} color="gray" />
+        </TouchableOpacity>
       </View>
     </View>
   );

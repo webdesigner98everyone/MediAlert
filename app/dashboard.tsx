@@ -56,7 +56,10 @@ export default function Dashboard() {
     );
 
     const handleEdit = (id: string) => {
-        //router.push(`/edit-medicine/${id}`); // Suponiendo que tienes una ruta de edición
+        router.push({
+            pathname: '/edit-medicine/[id]',
+            params: { id },
+        });
     };
 
     const handleDelete = async (id: string) => {

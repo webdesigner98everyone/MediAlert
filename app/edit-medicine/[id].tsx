@@ -219,6 +219,18 @@ const EditMedicine: React.FC = () => {
       >
         <Text style={{ color: '#fff', fontWeight: 'bold' }}>Actualizar</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => router.push('/dashboard')} // o router.back() si prefieres regresar a la anterior
+        style={{
+          backgroundColor: '#e5e7eb',
+          padding: 14,
+          borderRadius: 14,
+          marginTop: 10,
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ color: '#333', fontWeight: 'bold' }}>Cancelar</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };

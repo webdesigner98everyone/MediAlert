@@ -33,7 +33,7 @@ export default function Dashboard() {
                                 typeof m.id === 'string' &&
                                 typeof m.name === 'string' &&
                                 typeof m.time === 'string' &&
-                                typeof m.image === 'string'
+                                (typeof m.image === 'string' || m.image === null)  // Permite null
                         )
                         : [];
 
@@ -77,7 +77,10 @@ export default function Dashboard() {
 
     const renderMedication = ({ item }: { item: Medication }) => (
         <View style={styles.medicationItem}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image
+                source={item.image ? { uri: item.image } : require('../assets/images/default-med.jpg')}
+                style={styles.image}
+            />
             <View style={{ flex: 1, justifyContent: 'center' }}>
                 <Text style={styles.medicationName}>{item.name}</Text>
                 <Text style={styles.medicationTime}>Próxima: {item.time}</Text>

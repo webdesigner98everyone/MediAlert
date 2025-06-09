@@ -116,18 +116,29 @@ const AddMedicine: React.FC = () => {
             meds.push(newMed);
             await AsyncStorage.setItem(storageKey, JSON.stringify(meds));
 
-            // Notificación
-            // Programar la notificación local para la hora del medicamento
             const [hour, minute] = medicine.time.split(':').map(Number);
             const now = new Date();
-            const notificationTime = new Date();
-            notificationTime.setHours(hour, minute, 0);
+            let notificationTime = new Date();
+            notificationTime.setHours(hour, minute, 0, 0);
 
-            // Si la hora ya pasó hoy, programa para mañana
+            // Si ya pasó esa hora, programa para mañana
             if (notificationTime <= now) {
                 notificationTime.setDate(notificationTime.getDate() + 1);
             }
 
+            // Asegurar al menos 5 minutos desde ahora
+            const timeDifference = notificationTime.getTime() - now.getTime();
+            const minDelay = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+            if (timeDifference < minDelay) {
+                notificationTime = new Date(now.getTime() + minDelay);
+            }
+
+            // Extraer los valores actualizados
+            const scheduleHour = notificationTime.getHours();
+            const scheduleMinute = notificationTime.getMinutes();
+
+            // Programar notificación
             await Notifications.scheduleNotificationAsync({
                 content: {
                     title: `¡Hora de tomar ${medicine.name}!`,
@@ -135,10 +146,10 @@ const AddMedicine: React.FC = () => {
                     sound: true,
                 },
                 trigger: {
-                    hour,
-                    minute,
+                    hour: scheduleHour,
+                    minute: scheduleMinute,
                     repeats: true,
-                } as any
+                } as any,
             });
 
             Alert.alert('Éxito', 'Medicamento guardado correctamente');

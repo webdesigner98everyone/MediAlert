@@ -69,7 +69,7 @@ export default function LoginScreen() {
         <Text style={styles.link}>Registrarse</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => router.push('/RecoverPassword')}>
         <Text style={styles.link}>¿Has olvidado tu contraseña?</Text>
       </TouchableOpacity>
 

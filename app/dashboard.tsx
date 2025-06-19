@@ -157,10 +157,13 @@ export default function Dashboard() {
                     <Ionicons name="log-out-outline" size={24} color="#333" />
                     <Text style={styles.legendText}>Cerrar sesión</Text>
                 </TouchableOpacity>
-                <View style={styles.legendItem}>
+                <TouchableOpacity
+                    style={styles.legendItem}
+                    onPress={() => router.push('/history')} // Ruta a tu interfaz de historial
+                >
                     <Ionicons name="checkmark-done-outline" size={20} />
-                    <Text>Tomadas</Text>
-                </View> <TouchableOpacity
+                    <Text style={styles.legendText}>Tomadas</Text>
+                </TouchableOpacity> <TouchableOpacity
                     style={styles.legendItem}
                     onPress={() => router.push('/EditProfile')} // Asegúrate de tener esta ruta
                 >

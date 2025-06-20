@@ -163,12 +163,20 @@ export default function Dashboard() {
                 >
                     <Ionicons name="checkmark-done-outline" size={20} />
                     <Text style={styles.legendText}>Tomadas</Text>
-                </TouchableOpacity> <TouchableOpacity
+                </TouchableOpacity> 
+                <TouchableOpacity
                     style={styles.legendItem}
                     onPress={() => router.push('/EditProfile')} // Asegúrate de tener esta ruta
                 >
                     <Ionicons name="person-circle-outline" size={24} color="#333" />
                     <Text style={styles.legendText}>Perfil</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.legendItem}
+                    onPress={() => router.push('/reports')} // Asegúrate de tener esta ruta
+                >
+                    <Ionicons name="document-text-outline" size={24} color="#333" />
+                    <Text style={styles.legendText}>Reportes</Text>
                 </TouchableOpacity>
             </View>
 

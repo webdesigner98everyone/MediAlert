@@ -41,7 +41,13 @@ export default function Reports() {
 
             const stored = await AsyncStorage.getItem(`medications_${user.email}`);
             const parsed: Medication[] = stored ? JSON.parse(stored) : [];
-            setMedications(parsed);
+            // Aseguramos que todos los medicamentos tengan status
+            const normalized = parsed.map((m) => ({
+                ...m,
+                status: m.status || 'pendiente',
+            }));
+
+            setMedications(normalized);
         };
 
         loadMeds();

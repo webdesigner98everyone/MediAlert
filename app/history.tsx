@@ -52,7 +52,8 @@ export default function History() {
         const updatedMeds = medications.map(med => {
             if (med.id === id) {
                 if (status === 'pendiente' || status === 'omitido') {
-                    return { ...med, status, date: '' }; // Limpia la fecha
+                    const today = new Date().toLocaleDateString();
+                    return { ...med, status, date: today };
                 } else {
                     return { ...med, status }; // Ya validamos que hay fecha
                 }

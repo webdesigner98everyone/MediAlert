@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -38,70 +38,86 @@ export default function Register() {
 
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../assets/images/login-image.png')} style={styles.image} />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Image source={require('../assets/images/login-image.png')} style={styles.image} />
 
-      <Text style={styles.title}>Registro a {'\n'}<Text style={{ fontWeight: 'bold' }}>MediAlert</Text></Text>
-      <Text style={styles.subtitle}>Regístrate para llevar el control a tus medicamentos y procesos médicos.</Text>
+        <Text style={styles.title}>Registro a {'\n'}<Text style={{ fontWeight: 'bold' }}>MediAlert</Text></Text>
+        <Text style={styles.subtitle}>Regístrate para llevar el control a tus medicamentos y procesos médicos.</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Introducir nombre"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Introducir correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <View style={styles.passwordContainer}>
         <TextInput
-          style={styles.passwordInput}
-          placeholder="Crear contraseña"
-          value={password}
-          onChangeText={setPassword}
+          style={styles.input}
+          placeholder="Introducir nombre"
+          value={name}
+          onChangeText={setName}
         />
-        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.passwordContainer}>
         <TextInput
-          style={styles.passwordInput}
-          placeholder="Confirmar Contraseña"
-          value={confirm}
-          onChangeText={setConfirm}
-        />        
-        <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
-          <Ionicons name={showConfirm ? "eye-off" : "eye"} size={24} color="#aaa" />
+          style={styles.input}
+          placeholder="Introducir correo electrónico"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Crear contraseña"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Confirmar Contraseña"
+            secureTextEntry={!showConfirm}
+            value={confirm}
+            onChangeText={setConfirm}
+          />
+          <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
+            <Ionicons name={showConfirm ? "eye-off" : "eye"} size={24} color="#aaa" />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+          <Text style={styles.registerText}>Registrarse</Text>
         </TouchableOpacity>
-      </View>
 
-      <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerText}>Registrarse</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.backText}>Volver</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.backText}>Volver</Text>
-      </TouchableOpacity>
-
-      <View style={styles.footerIcons}>
-        <Ionicons name="information-circle-outline" size={24} color="#888" />
-        <Ionicons name="settings-outline" size={24} color="#888" />
-      </View>
-    </ScrollView>
+        <View style={styles.footerIcons}>
+          <Ionicons name="information-circle-outline" size={24} color="#888" />
+          <TouchableOpacity onPress={() => router.push('/setting')}>
+                    <Ionicons name="settings-outline" size={24} color="gray" />
+                  </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
+
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
-    paddingBottom: 30,
+    flexGrow: 1,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+    paddingVertical: 30,
   },
   image: {
     width: '100%',
@@ -162,5 +178,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 25,
     marginTop: 30,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 30,
+    backgroundColor: '#fff',
   },
 });

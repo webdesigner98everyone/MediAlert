@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, Alert, Platform } from 'react-native';
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, View, Text, TextInput, TouchableOpacity, ScrollView, Image, Alert, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -148,90 +148,101 @@ const EditMedicine: React.FC = () => {
   if (!medicine) return <Text style={{ padding: 20 }}>Cargando datos...</Text>;
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20, backgroundColor: '#fff', flexGrow: 1 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Editar Medicamento</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={{ padding: 20, backgroundColor: '#fff', flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Editar Medicamento</Text>
 
-      <Label text="Nombre del medicamento *" />
-      <Input placeholder="Ej: Ibuprofeno" value={medicine.name} onChangeText={val => handleChange('name', val)} />
-      <ErrorText msg={errors.name} />
+          <Label text="Nombre del medicamento *" />
+          <Input placeholder="Ej: Ibuprofeno" value={medicine.name} onChangeText={val => handleChange('name', val)} />
+          <ErrorText msg={errors.name} />
 
-      <Label text="Dosis *" />
-      <Input placeholder="Ej: 500" value={medicine.dose} onChangeText={val => handleChange('dose', val)} />
-      <ErrorText msg={errors.dose} />
+          <Label text="Dosis *" />
+          <Input placeholder="Ej: 500" value={medicine.dose} onChangeText={val => handleChange('dose', val)} />
+          <ErrorText msg={errors.dose} />
 
-      <Label text="Unidad *" />
-      <Input placeholder="mg, ml, gotas, etc." value={medicine.unit} onChangeText={val => handleChange('unit', val)} />
-      <ErrorText msg={errors.unit} />
+          <Label text="Unidad *" />
+          <Input placeholder="mg, ml, gotas, etc." value={medicine.unit} onChangeText={val => handleChange('unit', val)} />
+          <ErrorText msg={errors.unit} />
 
-      <Label text="Frecuencia *" />
-      <Input placeholder="Cada cuántas horas/días" value={medicine.frequency} onChangeText={val => handleChange('frequency', val)} />
-      <ErrorText msg={errors.frequency} />
+          <Label text="Frecuencia *" />
+          <Input placeholder="Cada cuántas horas/días" value={medicine.frequency} onChangeText={val => handleChange('frequency', val)} />
+          <ErrorText msg={errors.frequency} />
 
-      <Label text="Hora de toma *" />
-      <TouchableOpacity
-        style={{ backgroundColor: '#f4f4f5', padding: 12, borderRadius: 12, marginBottom: 10 }}
-        onPress={() => setShowTimePicker(true)}
-      >
-        <Text style={{ color: medicine.time ? '#000' : '#999' }}>{medicine.time || 'Seleccionar hora'}</Text>
-      </TouchableOpacity>
-      {showTimePicker && (
-        <DateTimePicker
-          mode="time"
-          value={new Date()}
-          onChange={onChangeTime}
-          is24Hour
-          display="default"
-        />
-      )}
-      <ErrorText msg={errors.time} />
+          <Label text="Hora de toma *" />
+          <TouchableOpacity
+            style={{ backgroundColor: '#f4f4f5', padding: 12, borderRadius: 12, marginBottom: 10 }}
+            onPress={() => setShowTimePicker(true)}
+          >
+            <Text style={{ color: medicine.time ? '#000' : '#999' }}>{medicine.time || 'Seleccionar hora'}</Text>
+          </TouchableOpacity>
+          {showTimePicker && (
+            <DateTimePicker
+              mode="time"
+              value={new Date()}
+              onChange={onChangeTime}
+              is24Hour
+              display="default"
+            />
+          )}
+          <ErrorText msg={errors.time} />
 
-      <Label text="Vía de administración *" />
-      <Input placeholder="Oral, inyectado, etc." value={medicine.via} onChangeText={val => handleChange('via', val)} />
-      <ErrorText msg={errors.via} />
+          <Label text="Vía de administración *" />
+          <Input placeholder="Oral, inyectado, etc." value={medicine.via} onChangeText={val => handleChange('via', val)} />
+          <ErrorText msg={errors.via} />
 
-      <Label text="Duración del tratamiento *" />
-      <Input placeholder="Ej: 7 días" value={medicine.duration} onChangeText={val => handleChange('duration', val)} />
-      <ErrorText msg={errors.duration} />
+          <Label text="Duración del tratamiento *" />
+          <Input placeholder="Ej: 7 días" value={medicine.duration} onChangeText={val => handleChange('duration', val)} />
+          <ErrorText msg={errors.duration} />
 
-      <Label text="Notas adicionales" />
-      <Input placeholder="Instrucciones especiales" value={medicine.notes} onChangeText={val => handleChange('notes', val)} multiline />
+          <Label text="Notas adicionales" />
+          <Input placeholder="Instrucciones especiales" value={medicine.notes} onChangeText={val => handleChange('notes', val)} multiline />
 
-      <TouchableOpacity
-        onPress={pickImage}
-        style={{ backgroundColor: '#ede9fe', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 10 }}
-      >
-        <Text style={{ color: '#6c4ee3', fontWeight: 'bold' }}>Cambiar imagen</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            onPress={pickImage}
+            style={{ backgroundColor: '#ede9fe', padding: 12, borderRadius: 12, alignItems: 'center', marginTop: 10 }}
+          >
+            <Text style={{ color: '#6c4ee3', fontWeight: 'bold' }}>Cambiar imagen</Text>
+          </TouchableOpacity>
 
-      {medicine.image && (
-        <Image source={{ uri: medicine.image }} style={{ width: '100%', height: 150, marginTop: 10, borderRadius: 8 }} />
-      )}
+          {medicine.image && (
+            <Image source={{ uri: medicine.image }} style={{ width: '100%', height: 150, marginTop: 10, borderRadius: 8 }} />
+          )}
 
-      <TouchableOpacity
-        onPress={handleUpdate}
-        style={{
-          backgroundColor: '#6c4ee3',
-          padding: 14,
-          borderRadius: 14,
-          marginTop: 20,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Actualizar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => router.push('/dashboard')} // o router.back() si prefieres regresar a la anterior
-        style={{
-          backgroundColor: '#e5e7eb',
-          padding: 14,
-          borderRadius: 14,
-          marginTop: 10,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: '#333', fontWeight: 'bold' }}>Cancelar</Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <TouchableOpacity
+            onPress={handleUpdate}
+            style={{
+              backgroundColor: '#6c4ee3',
+              padding: 14,
+              borderRadius: 14,
+              marginTop: 20,
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Actualizar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.push('/dashboard')} // o router.back() si prefieres regresar a la anterior
+            style={{
+              backgroundColor: '#e5e7eb',
+              padding: 14,
+              borderRadius: 14,
+              marginTop: 10,
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ color: '#333', fontWeight: 'bold' }}>Cancelar</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

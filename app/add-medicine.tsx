@@ -5,8 +5,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { getCurrentUser } from '../utils/auth';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+
 
 
 // Tipado para el estado del medicamento
@@ -177,97 +178,109 @@ const AddMedicine: React.FC = () => {
         msg ? <Text style={{ color: 'red', marginTop: -10, marginBottom: 10 }}>{msg}</Text> : null;
 
     return (
-        <ScrollView contentContainerStyle={{ padding: 20, backgroundColor: '#fff', flexGrow: 1 }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Agregar Medicamento</Text>
-
-            {/* Campos con etiquetas y errores */}
-            <Label text="Nombre del medicamento *" />
-            <Input placeholder="Ej: Ibuprofeno" value={medicine.name} onChangeText={val => handleChange('name', val)} />
-            <ErrorText msg={errors.name} />
-
-            <Label text="Dosis *" />
-            <Input placeholder="Ej: 500" value={medicine.dose} onChangeText={val => handleChange('dose', val)} />
-            <ErrorText msg={errors.dose} />
-
-            <Label text="Unidad *" />
-            <Input placeholder="mg, ml, gotas, etc." value={medicine.unit} onChangeText={val => handleChange('unit', val)} />
-            <ErrorText msg={errors.unit} />
-
-            <Label text="Frecuencia *" />
-            <Input placeholder="Cada cuántas horas/días" value={medicine.frequency} onChangeText={val => handleChange('frequency', val)} />
-            <ErrorText msg={errors.frequency} />
-
-            <Label text="Hora de toma *" />
-            <TouchableOpacity
-                style={{
-                    backgroundColor: '#f4f4f5',
-                    padding: 12,
-                    borderRadius: 12,
-                    marginBottom: 10,
-                }}
-                onPress={() => setShowTimePicker(true)}
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 20}
+        >
+            <ScrollView
+                contentContainerStyle={{ padding: 20, flexGrow: 1 }}
+                keyboardShouldPersistTaps="handled"
             >
-                <Text style={{ color: medicine.time ? '#000' : '#999' }}>
-                    {medicine.time || 'Seleccionar hora'}
-                </Text>
-            </TouchableOpacity>
-            {showTimePicker && (
-                <DateTimePicker
-                    mode="time"
-                    value={new Date()}
-                    onChange={onChangeTime}
-                    is24Hour
-                    display="default"
-                />
-            )}
-            <ErrorText msg={errors.time} />
+                <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Agregar Medicamento</Text>
 
-            <Label text="Vía de administración *" />
-            <Input placeholder="Oral, inyectado, etc." value={medicine.via} onChangeText={val => handleChange('via', val)} />
-            <ErrorText msg={errors.via} />
+                {/* Campos con etiquetas y errores */}
+                <Label text="Nombre del medicamento *" />
+                <Input placeholder="Ej: Ibuprofeno" value={medicine.name} onChangeText={val => handleChange('name', val)} />
+                <ErrorText msg={errors.name} />
 
-            <Label text="Duración del tratamiento *" />
-            <Input placeholder="Ej: 7 días" value={medicine.duration} onChangeText={val => handleChange('duration', val)} />
-            <ErrorText msg={errors.duration} />
+                <Label text="Dosis *" />
+                <Input placeholder="Ej: 500" value={medicine.dose} onChangeText={val => handleChange('dose', val)} />
+                <ErrorText msg={errors.dose} />
 
-            <Label text="Notas adicionales" />
-            <Input placeholder="Instrucciones especiales" value={medicine.notes} onChangeText={val => handleChange('notes', val)} multiline />
+                <Label text="Unidad *" />
+                <Input placeholder="mg, ml, gotas, etc." value={medicine.unit} onChangeText={val => handleChange('unit', val)} />
+                <ErrorText msg={errors.unit} />
 
-            {/* Imagen */}
-            <TouchableOpacity
-                onPress={pickImage}
-                style={{
-                    backgroundColor: '#ede9fe',
-                    padding: 12,
-                    borderRadius: 12,
-                    alignItems: 'center',
-                    marginTop: 10,
-                }}
-            >
-                <Text style={{ color: '#6c4ee3', fontWeight: 'bold' }}>Adjuntar imagen</Text>
-            </TouchableOpacity>
+                <Label text="Frecuencia *" />
+                <Input placeholder="Cada cuántas horas/días" value={medicine.frequency} onChangeText={val => handleChange('frequency', val)} />
+                <ErrorText msg={errors.frequency} />
 
-            {medicine.image && (
-                <Image
-                    source={{ uri: medicine.image }}
-                    style={{ width: '100%', height: 150, marginTop: 10, borderRadius: 8 }}
-                />
-            )}
+                <Label text="Hora de toma *" />
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: '#f4f4f5',
+                        padding: 12,
+                        borderRadius: 12,
+                        marginBottom: 10,
+                    }}
+                    onPress={() => setShowTimePicker(true)}
+                >
+                    <Text style={{ color: medicine.time ? '#000' : '#999' }}>
+                        {medicine.time || 'Seleccionar hora'}
+                    </Text>
+                </TouchableOpacity>
+                {showTimePicker && (
+                    <DateTimePicker
+                        mode="time"
+                        value={new Date()}
+                        onChange={onChangeTime}
+                        is24Hour
+                        display="default"
+                    />
+                )}
+                <ErrorText msg={errors.time} />
 
-            {/* Botón Guardar */}
-            <TouchableOpacity
-                onPress={handleSave}
-                style={{
-                    backgroundColor: '#6c4ee3',
-                    padding: 14,
-                    borderRadius: 14,
-                    marginTop: 20,
-                    alignItems: 'center',
-                }}
-            >
-                <Text style={{ color: '#fff', fontWeight: 'bold' }}>Guardar</Text>
-            </TouchableOpacity>
-        </ScrollView>
+                <Label text="Vía de administración *" />
+                <Input placeholder="Oral, inyectado, etc." value={medicine.via} onChangeText={val => handleChange('via', val)} />
+                <ErrorText msg={errors.via} />
+
+                <Label text="Duración del tratamiento *" />
+                <Input placeholder="Ej: 7 días" value={medicine.duration} onChangeText={val => handleChange('duration', val)} />
+                <ErrorText msg={errors.duration} />
+
+                <Label text="Notas adicionales" />
+                <Input placeholder="Instrucciones especiales" value={medicine.notes} onChangeText={val => handleChange('notes', val)} multiline />
+
+                {/* Imagen */}
+                <TouchableOpacity
+                    onPress={pickImage}
+                    style={{
+                        backgroundColor: '#ede9fe',
+                        padding: 12,
+                        borderRadius: 12,
+                        alignItems: 'center',
+                        marginTop: 10,
+                    }}
+                >
+                    <Text style={{ color: '#6c4ee3', fontWeight: 'bold' }}>Adjuntar imagen</Text>
+                </TouchableOpacity>
+
+                {medicine.image && (
+                    <Image
+                        source={{ uri: medicine.image }}
+                        style={{ width: '100%', height: 150, marginTop: 10, borderRadius: 8 }}
+                    />
+                )}
+
+                {/* Botón Guardar */}
+                <TouchableOpacity
+                    onPress={handleSave}
+                    style={{
+                        backgroundColor: '#6c4ee3',
+                        padding: 14,
+                        borderRadius: 14,
+                        marginTop: 20,
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text style={{ color: '#fff', fontWeight: 'bold' }}>Guardar</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </KeyboardAvoidingView>
+        </View>
+
     );
 };
 

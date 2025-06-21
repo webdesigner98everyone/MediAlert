@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { ScrollView,KeyboardAvoidingView,Platform,View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import { loginUser } from '../utils/auth';
@@ -30,7 +30,15 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
+  >
+    <ScrollView
+      contentContainerStyle={styles.scrollContainer}
+      keyboardShouldPersistTaps="handled"
+    >
       <Stack.Screen options={{ headerShown: false }} />
 
       <Image source={require('../assets/images/login-image.png')} style={styles.image} />
@@ -79,17 +87,16 @@ export default function LoginScreen() {
           <Ionicons name="settings-outline" size={24} color="gray" />
         </TouchableOpacity>
       </View>
-    </View>
-  );
+    </ScrollView>
+  </KeyboardAvoidingView>
+);
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-  },
+  flex: 1,
+  backgroundColor: '#fff',
+},
   image: {
     width: '100%',
     height: 180,
@@ -145,4 +152,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 80,
     marginTop: 40,
   },
+  scrollContainer: {
+  flexGrow: 1,
+  justifyContent: 'center',
+  padding: 24,
+  backgroundColor: '#fff',
+},
 });

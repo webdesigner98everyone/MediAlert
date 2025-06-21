@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     paddingVertical: 12,
+    color: '#000', // 👈 Esto hace que el texto sea negro y visible
   },
   button: {
     backgroundColor: '#5f41ff',

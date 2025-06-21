@@ -19,18 +19,20 @@ export default function RecoverPassword() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#fff' }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
     >
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
       >
         <Image source={require('../assets/images/login-image.png')} style={styles.image} />
 
         <Text style={styles.title}>Recuperar contraseña</Text>
-        <Text style={styles.subtitle}>Ingresa tu correo y te enviaremos instrucciones para restablecer tu contraseña.</Text>
+        <Text style={styles.subtitle}>
+          Ingresa tu correo y te enviaremos instrucciones para restablecer tu contraseña.
+        </Text>
 
         <TextInput
           style={styles.input}
@@ -103,5 +105,12 @@ const styles = StyleSheet.create({
     color: '#6a4df5',
     marginTop: 10,
     fontWeight: 'bold',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 30,
   },
 });

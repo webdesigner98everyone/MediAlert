@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
+import { KeyboardAvoidingView, Platform, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { getCurrentUser } from '../utils/auth';
@@ -51,34 +51,46 @@ export default function EditProfile() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../assets/images/login-image.png')} style={styles.image} />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Image source={require('../assets/images/login-image.png')} style={styles.image} />
 
-      <Text style={styles.title}>Editar Perfil</Text>
-      <Text style={styles.subtitle}>Actualiza tu nombre y correo electrónico.</Text>
+        <Text style={styles.title}>Editar Perfil</Text>
+        <Text style={styles.subtitle}>Actualiza tu nombre y correo electrónico.</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        editable={false} // Normalmente no se permite editar el correo
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Nombre"
+          placeholderTextColor="#888"
+          value={name}
+          onChangeText={setName}
+        />
 
-      <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-        <Text style={styles.saveText}>Guardar Cambios</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Correo electrónico"
+          placeholderTextColor="#888"
+          value={email}
+          onChangeText={setEmail}
+          editable={false}
+        />
 
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.backText}>Volver</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+          <Text style={styles.saveText}>Guardar Cambios</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.backText}>Volver</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

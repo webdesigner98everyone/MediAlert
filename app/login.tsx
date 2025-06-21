@@ -52,6 +52,7 @@ export default function LoginScreen() {
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
+        placeholderTextColor="#888" // 👈 agregamos esto
       />
 
       <View style={styles.passwordContainer}>
@@ -61,6 +62,7 @@ export default function LoginScreen() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
+          placeholderTextColor="#888" // 👈 agregamos esto
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />

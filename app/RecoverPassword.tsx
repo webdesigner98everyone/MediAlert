@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, View, Platform, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function RecoverPassword() {
@@ -18,29 +18,39 @@ export default function RecoverPassword() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../assets/images/login-image.png')} style={styles.image} />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Image source={require('../assets/images/login-image.png')} style={styles.image} />
 
-      <Text style={styles.title}>Recuperar contraseña</Text>
-      <Text style={styles.subtitle}>Ingresa tu correo y te enviaremos instrucciones para restablecer tu contraseña.</Text>
+        <Text style={styles.title}>Recuperar contraseña</Text>
+        <Text style={styles.subtitle}>Ingresa tu correo y te enviaremos instrucciones para restablecer tu contraseña.</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Correo electrónico"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          placeholderTextColor="#888"
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
-        <Text style={styles.buttonText}>Enviar instrucciones</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
+          <Text style={styles.buttonText}>Enviar instrucciones</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.linkText}>¿Recordaste tu contraseña? Inicia sesión</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.linkText}>¿Recordaste tu contraseña? Inicia sesión</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -58,12 +58,14 @@ export default function Register() {
           placeholder="Introducir nombre"
           value={name}
           onChangeText={setName}
+          placeholderTextColor="#888" // 👈 agregamos esto
         />
         <TextInput
           style={styles.input}
           placeholder="Introducir correo electrónico"
           value={email}
           onChangeText={setEmail}
+          placeholderTextColor="#888" // 👈 agregamos esto
         />
         <View style={styles.passwordContainer}>
           <TextInput
@@ -72,6 +74,7 @@ export default function Register() {
             secureTextEntry={!showPassword}
             value={password}
             onChangeText={setPassword}
+            placeholderTextColor="#888" // 👈 agregamos esto
           />
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" />
@@ -85,6 +88,7 @@ export default function Register() {
             secureTextEntry={!showConfirm}
             value={confirm}
             onChangeText={setConfirm}
+            placeholderTextColor="#888" // 👈 agregamos esto
           />
           <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
             <Ionicons name={showConfirm ? "eye-off" : "eye"} size={24} color="#aaa" />

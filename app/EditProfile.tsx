@@ -74,7 +74,7 @@ export default function EditProfile() {
         />
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: '#e0e0e0' }]} // 👈 estilo visual para campo deshabilitado
           placeholder="Correo electrónico"
           placeholderTextColor="#888"
           value={email}
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#f2f2f2',
     marginBottom: 15,
+    color: '#000', // 👈 Asegura que el texto ingresado sea visible
   },
   saveButton: {
     backgroundColor: '#6a4df5',

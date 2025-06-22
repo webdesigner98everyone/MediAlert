@@ -10,7 +10,7 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // 👈 estado para loading
+  const [loading, setLoading] = useState(false); // estado para loading
 
   const handleLogin = async () => {
     setLoading(true); // 👈 activa loading
@@ -52,7 +52,7 @@ export default function LoginScreen() {
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
-        placeholderTextColor="#888" // 👈 agregamos esto
+        placeholderTextColor="#888"
       />
 
       <View style={styles.passwordContainer}>
@@ -62,7 +62,7 @@ export default function LoginScreen() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
-          placeholderTextColor="#888" // 👈 agregamos esto
+          placeholderTextColor="#888"
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     paddingVertical: 12,
-    color: '#000', // 👈 Esto hace que el texto sea negro y visible
+    color: '#000', // Esto hace que el texto sea negro y visible
   },
   button: {
     backgroundColor: '#5f41ff',
